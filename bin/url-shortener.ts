@@ -3,18 +3,17 @@ import * as cdk from 'aws-cdk-lib/core';
 import { UrlShortenerStack } from '../lib/url-shortener-stack';
 
 const app = new cdk.App();
+
 new UrlShortenerStack(app, 'UrlShortenerStack', {
-  /* If you don't specify 'env', this stack will be environment-agnostic.
-   * Account/Region-dependent features and context lookups will not work,
-   * but a single synthesized template can be deployed anywhere. */
-
-  /* Uncomment the next line to specialize this stack for the AWS Account
-   * and Region that are implied by the current CLI configuration. */
-  // env: { account: process.env.CDK_DEFAULT_ACCOUNT, region: process.env.CDK_DEFAULT_REGION },
-
-  /* Uncomment the next line if you know exactly what Account and Region you
-   * want to deploy the stack to. */
-  // env: { account: '123456789012', region: 'us-east-1' },
-
-  /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
+  env: {
+    // Account comes from the active AWS CLI/SSO identity at deploy time.
+    // Region is fixed to Mumbai per project plan.
+    account: process.env.CDK_DEFAULT_ACCOUNT,
+    region: 'ap-south-1',
+  },
+  description: 'Serverless URL shortener (API Gateway HTTP API + Lambda + DynamoDB)',
+  tags: {
+    Project: 'url-shortener',
+    ManagedBy: 'cdk',
+  },
 });

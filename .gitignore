@@ -6,3 +6,18 @@ node_modules
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+
+# Local secrets / credential material (never commit)
+.env
+.env.*
+*.pem
+*.p12
+credentials
+.aws/
+
+# Local evidence may contain account-specific URLs; keep screenshots, ignore secrets dumps
+evidence/*.log
+evidence/*credentials*
+
+# Local DynamoDB Local JAR download
+.tools/

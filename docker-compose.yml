@@ -1,0 +1,15 @@
+# Local-only DynamoDB. No AWS cloud resources. No AWS charges.
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    container_name: url-shortener-dynamodb-local
+    ports:
+      - "8000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb -inMemory"
+    # Use a named volume if you want persistence across restarts:
+    # command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /data"
+    # volumes:
+    #   - dynamodb-data:/data
+
+# volumes:
+#   dynamodb-data:

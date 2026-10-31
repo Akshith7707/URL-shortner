@@ -1,0 +1,23 @@
+CDK synth completed successfully (2026-10-31).
+
+Unit tests: 5/5 passed
+Lambda runtime: nodejs24.x
+Region (stack): ap-south-1
+
+Synthesized resource types include:
+- AWS::DynamoDB::Table (url-shortener-urls, PAY_PER_REQUEST)
+- AWS::Lambda::Function x2 (url-shortener-create, url-shortener-redirect)
+- AWS::IAM::Role + AWS::IAM::Policy (least-privilege DynamoDB actions)
+- AWS::ApiGatewayV2::Api / Stage / Route / Integration / Lambda Permission
+- AWS::Logs::LogGroup x3 (create, redirect, API access) with 7-day retention
+- AWS::Logs::ResourcePolicy (API Gateway -> access logs)
+- AWS::CloudWatch::Alarm x2 (create/redirect Errors)
+- Stack outputs: ApiUrl, TableName, CreateFunctionName, RedirectFunctionName
+
+IAM verification from template:
+- Create Lambda: dynamodb:PutItem only (plus X-Ray + basic execution)
+- Redirect Lambda: dynamodb:GetItem + dynamodb:UpdateItem only (plus X-Ray + basic execution)
+
+Deploy blocked until:
+1) AWS credentials configured (aws sts get-caller-identity succeeds)
+2) Explicit user approval for cdk bootstrap (if needed) and cdk deploy

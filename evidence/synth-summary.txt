@@ -1,0 +1,454 @@
+AI agent detected
+Bundling asset UrlShortenerStack/CreateUrlFunction/Code/Stage...
+
+  ...90ec0248deb851a5c0226033ed2d5992f50d07fc2cc29ada-building\index.js  3.1kb
+  ...0248deb851a5c0226033ed2d5992f50d07fc2cc29ada-building\index.js.map  8.6kb
+
+Done in 15ms
+Bundling asset UrlShortenerStack/RedirectFunction/Code/Stage...
+
+  ...e23c871ff95df0f4b52f776de17503e1cda54b2cfd6bfe24-building\index.js  2.0kb
+  ...871ff95df0f4b52f776de17503e1cda54b2cfd6bfe24-building\index.js.map  4.8kb
+
+Done in 17ms
+Description: Serverless URL shortener (API Gateway HTTP API + Lambda + DynamoDB)
+Resources:
+  UrlsTable60368425:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: shortCode
+          AttributeType: S
+      BillingMode: PAY_PER_REQUEST
+      KeySchema:
+        - AttributeName: shortCode
+          KeyType: HASH
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      TableName: url-shortener-urls
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlsTable/Resource
+  CreateUrlLogGroup2B8943C5:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/url-shortener-create
+      RetentionInDays: 7
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/CreateUrlLogGroup/Resource
+  RedirectLogGroup285F745F:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/lambda/url-shortener-redirect
+      RetentionInDays: 7
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/RedirectLogGroup/Resource
+  CreateUrlFunctionServiceRole4A76D202:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/CreateUrlFunction/ServiceRole/Resource
+  CreateUrlFunctionServiceRoleDefaultPolicyA91B22DA:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - xray:PutTelemetryRecords
+              - xray:PutTraceSegments
+            Effect: Allow
+            Resource: "*"
+          - Action: dynamodb:PutItem
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - UrlsTable60368425
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: CreateUrlFunctionServiceRoleDefaultPolicyA91B22DA
+      Roles:
+        - Ref: CreateUrlFunctionServiceRole4A76D202
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/CreateUrlFunction/ServiceRole/DefaultPolicy/Resource
+  CreateUrlFunctionCC810871:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: cdk-hnb659fds-assets-111122223333-us-east-1
+        S3Key: 48856363b7071a7185c6820abe3e668ae5e8b2a6f39f8904bc27914054664713.zip
+      Description: Creates a short URL mapping in DynamoDB
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: UrlsTable60368425
+          NODE_OPTIONS: --enable-source-maps
+      FunctionName: url-shortener-create
+      Handler: index.handler
+      LoggingConfig:
+        LogGroup:
+          Ref: CreateUrlLogGroup2B8943C5
+      MemorySize: 128
+      Role:
+        Fn::GetAtt:
+          - CreateUrlFunctionServiceRole4A76D202
+          - Arn
+      Runtime: nodejs24.x
+      Timeout: 10
+      TracingConfig:
+        Mode: Active
+    DependsOn:
+      - CreateUrlFunctionServiceRoleDefaultPolicyA91B22DA
+      - CreateUrlFunctionServiceRole4A76D202
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/CreateUrlFunction/Resource
+      aws:asset:path: asset.48856363b7071a7185c6820abe3e668ae5e8b2a6f39f8904bc27914054664713
+      aws:asset:is-bundled: true
+      aws:asset:property: Code
+  RedirectFunctionServiceRole098A3D15:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/RedirectFunction/ServiceRole/Resource
+  RedirectFunctionServiceRoleDefaultPolicy92D89BB5:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - xray:PutTelemetryRecords
+              - xray:PutTraceSegments
+            Effect: Allow
+            Resource: "*"
+          - Action:
+              - dynamodb:GetItem
+              - dynamodb:UpdateItem
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - UrlsTable60368425
+                - Arn
+        Version: "2012-10-17"
+      PolicyName: RedirectFunctionServiceRoleDefaultPolicy92D89BB5
+      Roles:
+        - Ref: RedirectFunctionServiceRole098A3D15
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/RedirectFunction/ServiceRole/DefaultPolicy/Resource
+  RedirectFunction7849A310:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        S3Bucket: cdk-hnb659fds-assets-111122223333-us-east-1
+        S3Key: bc6957951253ddadb16c5ee212f2f2771296f4b3eabbc0b8242171fa96d33bd2.zip
+      Description: Looks up short codes and redirects to the long URL
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: UrlsTable60368425
+          NODE_OPTIONS: --enable-source-maps
+      FunctionName: url-shortener-redirect
+      Handler: index.handler
+      LoggingConfig:
+        LogGroup:
+          Ref: RedirectLogGroup285F745F
+      MemorySize: 128
+      Role:
+        Fn::GetAtt:
+          - RedirectFunctionServiceRole098A3D15
+          - Arn
+      Runtime: nodejs24.x
+      Timeout: 10
+      TracingConfig:
+        Mode: Active
+    DependsOn:
+      - RedirectFunctionServiceRoleDefaultPolicy92D89BB5
+      - RedirectFunctionServiceRole098A3D15
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/RedirectFunction/Resource
+      aws:asset:path: asset.bc6957951253ddadb16c5ee212f2f2771296f4b3eabbc0b8242171fa96d33bd2
+      aws:asset:is-bundled: true
+      aws:asset:property: Code
+  UrlShortenerApi1FE619BE:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      CorsConfiguration:
+        AllowHeaders:
+          - Content-Type
+        AllowMethods:
+          - GET
+          - POST
+          - OPTIONS
+        AllowOrigins:
+          - "*"
+        MaxAge: 86400
+      Description: HTTP API for the URL shortener
+      Name: url-shortener-api
+      ProtocolType: HTTP
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/Resource
+  UrlShortenerApiDefaultStage10176482:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      AccessLogSettings:
+        DestinationArn:
+          Fn::GetAtt:
+            - ApiAccessLogsE9DF007D
+            - Arn
+        Format: '{"requestId":"$context.requestId","ip":"$context.identity.sourceIp","requestTime":"$context.requestTime","httpMethod":"$context.httpMethod","routeKey":"$context.routeKey","status":"$context.status","protocol":"$context.protocol","responseLength":"$context.responseLength","integrationError":"$context.integrationErrorMessage"}'
+      ApiId:
+        Ref: UrlShortenerApi1FE619BE
+      AutoDeploy: true
+      StageName: $default
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/DefaultStage/Resource
+  UrlShortenerApiPOSTshortenCreateIntegration93BAE17E:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: UrlShortenerApi1FE619BE
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::GetAtt:
+          - CreateUrlFunctionCC810871
+          - Arn
+      PayloadFormatVersion: "2.0"
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/POST--shorten/CreateIntegration/Resource
+  UrlShortenerApiPOSTshortenCreateIntegrationPermission4199DF4C:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - CreateUrlFunctionCC810871
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:us-east-1:111122223333:"
+            - Ref: UrlShortenerApi1FE619BE
+            - /*/*/shorten
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/POST--shorten/CreateIntegration-Permission
+  UrlShortenerApiPOSTshorten8DC19BA5:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: UrlShortenerApi1FE619BE
+      AuthorizationType: NONE
+      RouteKey: POST /shorten
+      Target:
+        Fn::Join:
+          - ""
+          - - integrations/
+            - Ref: UrlShortenerApiPOSTshortenCreateIntegration93BAE17E
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/POST--shorten/Resource
+  UrlShortenerApiGEThealthCreateIntegrationPermissionB6675820:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - CreateUrlFunctionCC810871
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:us-east-1:111122223333:"
+            - Ref: UrlShortenerApi1FE619BE
+            - /*/*/health
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/GET--health/CreateIntegration-Permission
+  UrlShortenerApiGEThealth66222F54:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: UrlShortenerApi1FE619BE
+      AuthorizationType: NONE
+      RouteKey: GET /health
+      Target:
+        Fn::Join:
+          - ""
+          - - integrations/
+            - Ref: UrlShortenerApiPOSTshortenCreateIntegration93BAE17E
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/GET--health/Resource
+  UrlShortenerApiGETcodeRedirectIntegration4B4D4ECD:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId:
+        Ref: UrlShortenerApi1FE619BE
+      IntegrationType: AWS_PROXY
+      IntegrationUri:
+        Fn::GetAtt:
+          - RedirectFunction7849A310
+          - Arn
+      PayloadFormatVersion: "2.0"
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/GET--{code}/RedirectIntegration/Resource
+  UrlShortenerApiGETcodeRedirectIntegrationPermissionA2C302D7:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - RedirectFunction7849A310
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:us-east-1:111122223333:"
+            - Ref: UrlShortenerApi1FE619BE
+            - /*/*/{code}
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/GET--{code}/RedirectIntegration-Permission
+  UrlShortenerApiGETcode5491FB4B:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId:
+        Ref: UrlShortenerApi1FE619BE
+      AuthorizationType: NONE
+      RouteKey: GET /{code}
+      Target:
+        Fn::Join:
+          - ""
+          - - integrations/
+            - Ref: UrlShortenerApiGETcodeRedirectIntegration4B4D4ECD
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/UrlShortenerApi/GET--{code}/Resource
+  ApiAccessLogsE9DF007D:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /aws/apigateway/url-shortener
+      RetentionInDays: 7
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/ApiAccessLogs/Resource
+  ApiAccessLogsPolicyResourcePolicy4D577253:
+    Type: AWS::Logs::ResourcePolicy
+    Properties:
+      PolicyDocument:
+        Fn::Join:
+          - ""
+          - - '{"Statement":[{"Action":["logs:CreateLogStream","logs:PutLogEvents"],"Effect":"Allow","Principal":{"Service":"apigateway.amazonaws.com"},"Resource":["'
+            - Fn::GetAtt:
+                - ApiAccessLogsE9DF007D
+                - Arn
+            - '","'
+            - Fn::GetAtt:
+                - ApiAccessLogsE9DF007D
+                - Arn
+            - :*"]}],"Version":"2012-10-17"}
+      PolicyName: UrlShortenerStackApiAccessLogsPolicyC7AAFE25
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/ApiAccessLogs/Policy/ResourcePolicy
+  CreateUrlErrorAlarm67DA12BD:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: CreateUrl Lambda reported errors
+      AlarmName: url-shortener-create-errors
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: FunctionName
+          Value:
+            Ref: CreateUrlFunctionCC810871
+      EvaluationPeriods: 1
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Period: 60
+      Statistic: Sum
+      Threshold: 1
+      TreatMissingData: notBreaching
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/CreateUrlErrorAlarm/Resource
+  RedirectErrorAlarm47799536:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: Redirect Lambda reported errors
+      AlarmName: url-shortener-redirect-errors
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      DatapointsToAlarm: 1
+      Dimensions:
+        - Name: FunctionName
+          Value:
+            Ref: RedirectFunction7849A310
+      EvaluationPeriods: 1
+      MetricName: Errors
+      Namespace: AWS/Lambda
+      Period: 60
+      Statistic: Sum
+      Threshold: 1
+      TreatMissingData: notBreaching
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/RedirectErrorAlarm/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/+1WbW/bNhD+LeXHgtEKd0Mxf1PSbAu2tJ7tDhiMwDiTZ/kSihTIkz1V0H8vSL3EWbvtU1GgHSCA5L3f8fQcZ9ns1Q/Zi2dwChdKP1wY2mXtikE9SDiFbasbC6XTu6xdw87gphUc1zdQopiL50KKCjwTk7O/YiPmrbCPLG6quF2JToodGUO2uHU6khb5n9vF9XK7vP793fVqLaTwWLojmIUzpBoxFxoDe9dEB44s39g1lbhE5Y7om1WFivakIPqNTj8hc21joFrM92ACdt2dvNrblEQnjStC1v7mip+9q6tNK8ywPcvLI6Pt7b/65/A6+cWUU0JjDnKJwdVeYS+3Ec9F4j8ld9JAudOwtU7jfcjepOWn2qrobtMKX1umx/ujEl3Nw6nE0vlmRe8ntgdFthBzkSumIwop0B7JO1uiHbV2tdUmSbWiJEv7RszZ1yhFH9gtVCOBwRc46uFfjN6CuXW6NhgStZNiP8R6Vi607JthfwCrDfrhpDEoT1VfykQZqz0cVd+N0XLbf99WBb65hP+/8u5OEpRZu3QJzSGEukR9maC78mQVVWBypVw9ZdPLRIVcTWY7KUqwUKBO0EIx2k37hNbkfpC9i2UGrdduMboY8WzTDlxmUIcba8jixIso9t/Mf7f7VSfYY7wzKB9xfzK3dpHzkZePyVqvGBhjA4ezgD9F/sz2Uz7jrAovtxACcsjyuMjwMrus1QPyJQRMmaYp14+0rL3a23GSJSvoSwqBnO0kVFQA4wma4yxrf2Gu8opGC3KydLW3eUUy8lcMBU5TNJ0Sfelqxs0TrUi+sYyFT8+Rzbm5M3p/UzVjJ5VxtT4Bq0PW5gZ8GX/EuJ794CWyJxWb9gTeki3CwBiPf8zGNuWDx3BwRo/YcARTJ58L9OT0qKmBIT2UwtoltxMklhV4Cs6+rdADOz9hHQLfxiLa4jUwiLmwji89gjpEdJN91K//hjjpcr+idPrGiKyum95ZfW+kxozdQbaIUm9rrmruZHxfZffhu+Ps++zH7MWz+0B0McyZbNmvHwBECLdLewsAAA==
+    Metadata:
+      aws:cdk:path: UrlShortenerStack/CDKMetadata/Default
+Outputs:
+  ApiUrl:
+    Description: Base URL of the URL shortener HTTP API
+    Value:
+      Fn::GetAtt:
+        - UrlShortenerApi1FE619BE
+        - ApiEndpoint
+    Export:
+      Name: UrlShortenerApiUrl
+  TableName:
+    Description: DynamoDB table storing short URL mappings
+    Value:
+      Ref: UrlsTable60368425
+    Export:
+      Name: UrlShortenerTableName
+  CreateFunctionName:
+    Description: Create URL Lambda function name
+    Value:
+      Ref: CreateUrlFunctionCC810871
+  RedirectFunctionName:
+    Description: Redirect Lambda function name
+    Value:
+      Ref: RedirectFunction7849A310
+Parameters:
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
+
