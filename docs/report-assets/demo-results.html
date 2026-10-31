@@ -1,0 +1,16 @@
+<!DOCTYPE html><html><head><meta charset='utf-8'><title>URL Shortener Demo Results</title>
+<style>body{font-family:Segoe UI,Arial,sans-serif;background:#0f172a;color:#e2e8f0;padding:40px}h1{color:#38bdf8}.card{background:#1e293b;border-radius:12px;padding:24px;margin:16px 0;border:1px solid #334155}code,pre{background:#020617;padding:12px;border-radius:8px;display:block;overflow:auto;color:#86efac}.ok{color:#4ade80}.label{color:#94a3b8;font-size:14px}</style></head><body>
+<h1>URL Shortener — Local End-to-End Demo</h1>
+<p class='label'>Student: Akshith Reddy Ponna &nbsp;|&nbsp; Roll: 2451-23-751-028</p>
+<div class='card'><div class='label'>1. Health Check — GET /health</div><pre class='ok'>{"status": "ok"}</pre></div>
+<div class='card'><div class='label'>2. Create Short URL — POST /shorten</div><pre>{
+  "shortCode": "sDsLavf",
+  "shortUrl": "http://127.0.0.1:3000/sDsLavf",
+  "longUrl": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+  "createdAt": "2026-10-31T12:18:55.119Z"
+}</pre></div>
+<div class='card'><div class='label'>3. Redirect — GET /sDsLavf</div><pre class='ok'>HTTP 301 Moved Permanently
+Location: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html</pre>
+<p><a href='http://127.0.0.1:3000/sDsLavf' style='color:#38bdf8'>Open short link</a></p></div>
+<div class='card'><div class='label'>4. Missing code — GET /doesnotexist999</div><pre style='color:#f87171'>{"error": "Short URL not found"} — HTTP 404</pre></div>
+</body></html>
