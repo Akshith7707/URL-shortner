@@ -111,38 +111,25 @@ def build() -> Path:
     pdf.t("GitHub Repository:", size=11, style="B", h=6)
     pdf.t("https://github.com/Akshith7707/URL-shortner", size=11, h=6)
     pdf.ln(8)
-    pdf.t("Academic Year: 2026 - 2027", size=11, h=6)
-    pdf.t("Date: 31 October 2026", size=11, h=6)
+    pdf.t("Tools: AWS CDK, Lambda, API Gateway, DynamoDB", size=11, h=6)
+    pdf.t("Verification Mode: Local zero-cost testing with DynamoDB Local", size=11, h=6)
 
-    # ===== 2 Certificate + Acknowledgment =====
+    # ===== 2 Acknowledgment =====
     pdf.add_page()
-    pdf.h1("2. Certificate")
-    pdf.p(
-        'This is to certify that the project report titled "URL Shortener using Lambda + DynamoDB" '
-        "submitted by Akshith Reddy Ponna (Roll No. 2451-23-751-028) in partial fulfillment of the "
-        "requirements of the Cloud Infrastructure and DevOps Engineer domain project has been carried "
-        "out as part of academic project work."
-    )
-    pdf.ln(10)
-    pdf.p("Guide Signature: ____________________")
-    pdf.ln(6)
-    pdf.p("HOD Signature: _______________________")
-    pdf.ln(6)
-    pdf.p("Principal Signature: _________________")
-    pdf.ln(10)
-    pdf.h1("3. Acknowledgment")
+    pdf.h1("2. Acknowledgment")
     pdf.p(
         "I would like to express my sincere gratitude to my project guide and faculty members for their "
         "continuous support, guidance and encouragement throughout the development of this project."
     )
     pdf.p(
-        "I also thank the Department for providing the academic environment and resources required to "
-        "complete this work. Finally, I thank my friends and family for their support during the project."
+        "I also thank the Department of Computer Science and Engineering for providing the academic "
+        "environment and resources required to complete this work. Finally, I thank my friends and family "
+        "for their support during the project."
     )
 
     # ===== 3 Abstract =====
     pdf.add_page()
-    pdf.h1("4. Abstract")
+    pdf.h1("3. Abstract")
     pdf.p(
         "Cloud computing enables developers to build scalable applications without managing physical servers. "
         "This project implements a serverless URL shortener on Amazon Web Services using Amazon API Gateway, "
@@ -163,44 +150,43 @@ def build() -> Path:
     )
 
     # ===== TOC =====
-    pdf.h1("5. Table of Contents")
+    pdf.h1("4. Table of Contents")
     toc = [
         "1. Cover Page",
-        "2. Certificate",
-        "3. Acknowledgment",
-        "4. Abstract",
-        "5. Table of Contents",
-        "6. Introduction",
-        "7. Literature Survey",
-        "8. Problem Statement",
-        "9. Objectives",
-        "10. Existing System",
-        "11. Proposed System",
-        "12. System Architecture",
-        "13. Technologies Used",
-        "14. Implementation Methodology",
-        "15. System Testing",
-        "16. Results and Discussion",
-        "17. Advantages and Limitations",
-        "18. Applications",
-        "19. Future Scope",
-        "20. Conclusion",
-        "21. References",
+        "2. Acknowledgment",
+        "3. Abstract",
+        "4. Table of Contents",
+        "5. Introduction",
+        "6. Literature Survey",
+        "7. Problem Statement",
+        "8. Objectives",
+        "9. Existing System",
+        "10. Proposed System",
+        "11. System Architecture",
+        "12. Technologies Used",
+        "13. Implementation Methodology",
+        "14. System Testing",
+        "15. Results and Discussion",
+        "16. Advantages and Limitations",
+        "17. Applications",
+        "18. Future Scope",
+        "19. Conclusion",
+        "20. References",
     ]
     for item in toc:
         pdf.t(item, size=11, h=6)
 
     # ===== Introduction =====
     pdf.add_page()
-    pdf.h1("6. Introduction")
-    pdf.h2("6.1 Background")
+    pdf.h1("5. Introduction")
+    pdf.h2("5.1 Background")
     pdf.p(
         "Modern applications increasingly rely on cloud platforms to reduce operational overhead and improve "
         "scalability. Serverless computing is a cloud model where the cloud provider runs the compute layer "
         "and developers focus on business logic. AWS Lambda, API Gateway and DynamoDB are commonly used "
         "together for lightweight HTTP APIs."
     )
-    pdf.h2("6.2 Need for the Project")
+    pdf.h2("5.2 Need for the Project")
     pdf.p("Long URLs are difficult to share in messages, documents and social media. A URL shortener:")
     pdf.bullets(
         [
@@ -210,7 +196,7 @@ def build() -> Path:
             "Can track usage with counters and logs",
         ]
     )
-    pdf.h2("6.3 Scope")
+    pdf.h2("5.3 Scope")
     pdf.p(
         "This project covers design, Infrastructure as Code, application logic, security (IAM least privilege), "
         "monitoring design, local verification and documentation. Production custom domains and authentication "
@@ -219,25 +205,25 @@ def build() -> Path:
 
     # ===== Literature =====
     pdf.add_page()
-    pdf.h1("7. Literature Survey")
-    pdf.h2("7.1 Serverless Computing")
+    pdf.h1("6. Literature Survey")
+    pdf.h2("6.1 Serverless Computing")
     pdf.p(
         "Serverless platforms execute code in response to events and scale automatically. Compared with "
         "always-on virtual machines, serverless can reduce idle cost for spiky workloads such as URL "
         "shortening APIs."
     )
-    pdf.h2("7.2 API Gateway and Lambda Integration")
+    pdf.h2("6.2 API Gateway and Lambda Integration")
     pdf.p(
         "Amazon API Gateway exposes HTTPS endpoints and integrates with Lambda using proxy integration. "
         "HTTP APIs provide a lower-cost option for simple REST-style routes, which suits create and redirect "
         "operations in this project."
     )
-    pdf.h2("7.3 NoSQL Key-Value Storage")
+    pdf.h2("6.3 NoSQL Key-Value Storage")
     pdf.p(
         "Amazon DynamoDB is a managed NoSQL database optimized for key-based access. A short-code lookup is "
         "a natural partition-key access pattern and provides single-digit millisecond reads at scale."
     )
-    pdf.h2("7.4 Infrastructure as Code")
+    pdf.h2("6.4 Infrastructure as Code")
     pdf.p(
         "AWS CDK allows infrastructure to be defined in general-purpose languages and synthesized to "
         "CloudFormation. This improves repeatability, reviewability and alignment between application and "
@@ -245,14 +231,14 @@ def build() -> Path:
     )
 
     # ===== Problem / Objectives =====
-    pdf.h1("8. Problem Statement")
+    pdf.h1("7. Problem Statement")
     pdf.p(
         "Manual or single-server URL shortener designs suffer from operational complexity, weak scaling "
         "characteristics and inconsistent deployment practices. There is a need for an automated, serverless "
         "design that can create short links, redirect users reliably, enforce least-privilege access and be "
         "deployed reproducibly using Infrastructure as Code."
     )
-    pdf.h1("9. Objectives")
+    pdf.h1("8. Objectives")
     pdf.bullets(
         [
             "Design a serverless URL shortener architecture on AWS",
@@ -267,7 +253,7 @@ def build() -> Path:
 
     # ===== Existing / Proposed =====
     pdf.add_page()
-    pdf.h1("10. Existing System")
+    pdf.h1("9. Existing System")
     pdf.p(
         "Traditional URL shorteners are often hosted on a single application server with a relational database. "
         "Limitations include:"
@@ -280,12 +266,12 @@ def build() -> Path:
             "Broader IAM permissions than necessary in many student demos",
         ]
     )
-    pdf.h1("11. Proposed System")
+    pdf.h1("10. Proposed System")
     pdf.p(
         "The proposed system is a serverless URL shortener. Clients call an HTTP API. Lambda functions "
         "perform create and redirect logic. DynamoDB stores mappings. CDK defines all resources."
     )
-    pdf.h2("11.1 Key Features")
+    pdf.h2("10.1 Key Features")
     pdf.bullets(
         [
             "POST /shorten to create a short code",
@@ -297,14 +283,14 @@ def build() -> Path:
             "Local zero-cost execution path for verification",
         ]
     )
-    pdf.h2("11.2 Working Principle")
+    pdf.h2("10.2 Working Principle")
     pdf.p(
         "When a client submits a long URL, the Create Lambda validates the URL, generates a base62 short "
         "code and writes an item to DynamoDB. The response includes shortCode and shortUrl. When a client "
         "opens the short URL, the Redirect Lambda reads the item and returns Location: <longUrl> with status "
         "301. Unknown codes return 404."
     )
-    pdf.h2("11.3 Comparison with Existing System")
+    pdf.h2("10.3 Comparison with Existing System")
     pdf.bullets(
         [
             "Existing: single server / manual setup  |  Proposed: serverless managed services",
@@ -317,7 +303,7 @@ def build() -> Path:
 
     # ===== Architecture =====
     pdf.add_page()
-    pdf.h1("12. System Architecture")
+    pdf.h1("11. System Architecture")
     pdf.p(
         "Figure 1 shows the target AWS architecture. In local verification mode, DynamoDB Local and a local "
         "HTTP API replace the managed API Gateway endpoint while using the same Lambda handler code."
@@ -327,7 +313,7 @@ def build() -> Path:
         "Figure 1: System architecture - Client, API Gateway, Lambda functions, DynamoDB and CloudWatch.",
         w=170,
     )
-    pdf.h2("12.1 Components")
+    pdf.h2("11.1 Components")
     pdf.bullets(
         [
             "API Gateway HTTP API: entry point for /shorten, /health and /{code}",
@@ -337,7 +323,7 @@ def build() -> Path:
             "CloudWatch log groups and error alarms",
         ]
     )
-    pdf.h2("12.2 Data Model")
+    pdf.h2("11.2 Data Model")
     pdf.bullets(
         [
             "shortCode (S) - partition key",
@@ -350,7 +336,7 @@ def build() -> Path:
 
     # ===== Technologies =====
     pdf.add_page()
-    pdf.h1("13. Technologies Used")
+    pdf.h1("12. Technologies Used")
     pdf.bullets(
         [
             "Amazon API Gateway (HTTP API)",
@@ -365,7 +351,7 @@ def build() -> Path:
         ]
     )
 
-    pdf.h1("14. Implementation Methodology")
+    pdf.h1("13. Implementation Methodology")
     pdf.h2("Step 1: Project scaffolding")
     pdf.p("Initialize an AWS CDK TypeScript application and define the UrlShortenerStack.")
     pdf.h2("Step 2: DynamoDB table")
@@ -390,7 +376,7 @@ def build() -> Path:
     )
 
     pdf.add_page()
-    pdf.h2("14.1 Project Structure")
+    pdf.h2("13.1 Project Structure")
     pdf.bullets(
         [
             "bin/url-shortener.ts - CDK application entry point",
@@ -405,7 +391,7 @@ def build() -> Path:
             "docs/ - architecture, local guide and this report",
         ]
     )
-    pdf.h2("14.2 IAM Design Details")
+    pdf.h2("13.2 IAM Design Details")
     pdf.p(
         "Security is a core DevOps concern. The stack avoids broad AdministratorAccess on application roles."
     )
@@ -419,7 +405,7 @@ def build() -> Path:
             "No AWS access keys are hardcoded in source files",
         ]
     )
-    pdf.h2("14.3 API Examples")
+    pdf.h2("13.3 API Examples")
     pdf.p("Create request body:")
     pdf.t('{ "url": "https://docs.aws.amazon.com/" }', size=10, h=6, color=(40, 40, 40))
     pdf.p("Successful create response includes shortCode, shortUrl, longUrl and createdAt.")
@@ -427,9 +413,9 @@ def build() -> Path:
 
     # ===== Testing =====
     pdf.add_page()
-    pdf.h1("15. System Testing")
+    pdf.h1("14. System Testing")
     pdf.p("Testing was performed locally against DynamoDB Local and the local API at http://127.0.0.1:3000.")
-    pdf.h2("15.1 Test Cases")
+    pdf.h2("14.1 Test Cases")
     pdf.bullets(
         [
             "Health check returns HTTP 200 and {status: ok}",
@@ -440,7 +426,7 @@ def build() -> Path:
             "CDK unit tests assert table, functions, API and IAM statements",
         ]
     )
-    pdf.h2("15.2 Tools")
+    pdf.h2("14.2 Tools")
     pdf.bullets(
         [
             "Jest unit and local integration tests",
@@ -452,12 +438,12 @@ def build() -> Path:
 
     # ===== Results =====
     pdf.add_page()
-    pdf.h1("16. Results and Discussion")
+    pdf.h1("15. Results and Discussion")
     pdf.p(
         "The following figures were captured at a standard desktop viewport (1366x768) from the working "
         "local deployment. They show end-to-end behavior of the URL shortener handlers."
     )
-    pdf.h2("16.1 Demo Console Overview")
+    pdf.h2("15.1 Demo Console Overview")
     pdf.fig(
         ASSETS / "fig-demo-console.png",
         "Figure 2: Local demo console showing health and create/redirect panels at normal desktop scale.",
@@ -465,13 +451,13 @@ def build() -> Path:
     )
 
     pdf.add_page()
-    pdf.h2("16.2 Health Endpoint")
+    pdf.h2("15.2 Health Endpoint")
     pdf.fig(
         ASSETS / "fig-health-browser.png",
         "Figure 3: Browser response for GET /health returning {\"status\":\"ok\"}.",
         w=168,
     )
-    pdf.h2("16.3 Create Short URL")
+    pdf.h2("15.3 Create Short URL")
     pdf.fig(
         ASSETS / "fig-create-json.png",
         "Figure 4: Successful POST /shorten response (HTTP 201) with shortCode, shortUrl, longUrl and createdAt.",
@@ -479,13 +465,13 @@ def build() -> Path:
     )
 
     pdf.add_page()
-    pdf.h2("16.4 Redirect Response")
+    pdf.h2("15.4 Redirect Response")
     pdf.fig(
         ASSETS / "fig-redirect-headers.png",
         "Figure 5: Redirect response headers showing HTTP 301 Moved Permanently and Location of the long URL.",
         w=168,
     )
-    pdf.h2("16.5 Not Found Handling")
+    pdf.h2("15.5 Not Found Handling")
     pdf.fig(
         ASSETS / "fig-404.png",
         "Figure 6: Unknown short code returns HTTP 404 with an error payload.",
@@ -493,13 +479,13 @@ def build() -> Path:
     )
 
     pdf.add_page()
-    pdf.h2("16.6 Smoke Test Terminal Output")
+    pdf.h2("15.6 Smoke Test Terminal Output")
     pdf.fig(
         ASSETS / "fig-terminal.png",
         "Figure 7: PowerShell smoke test output confirming health, create, redirect and 404 cases.",
         w=168,
     )
-    pdf.h2("16.7 Source Repository")
+    pdf.h2("15.7 Source Repository")
     pdf.fig(
         ASSETS / "fig-github.png",
         "Figure 8: GitHub repository https://github.com/Akshith7707/URL-shortner containing the project source.",
@@ -507,7 +493,7 @@ def build() -> Path:
     )
 
     pdf.add_page()
-    pdf.h2("16.8 Summary of Observations")
+    pdf.h2("15.8 Summary of Observations")
     pdf.bullets(
         [
             "Health endpoint is available and returns a clear OK payload",
@@ -520,7 +506,7 @@ def build() -> Path:
     )
 
     # ===== Advantages / Future / Conclusion =====
-    pdf.h1("17. Advantages and Limitations")
+    pdf.h1("16. Advantages and Limitations")
     pdf.h2("Advantages")
     pdf.bullets(
         [
@@ -542,7 +528,7 @@ def build() -> Path:
     )
 
     pdf.add_page()
-    pdf.h1("18. Applications")
+    pdf.h1("17. Applications")
     pdf.bullets(
         [
             "Marketing campaign links and QR codes",
@@ -553,7 +539,7 @@ def build() -> Path:
         ]
     )
 
-    pdf.h1("19. Future Scope")
+    pdf.h1("18. Future Scope")
     pdf.bullets(
         [
             "Deploy with a non-root IAM role after budget approval",
@@ -567,7 +553,7 @@ def build() -> Path:
     )
 
     pdf.add_page()
-    pdf.h1("20. Conclusion")
+    pdf.h1("19. Conclusion")
     pdf.p(
         "This project successfully designs and implements a serverless URL shortener using AWS Lambda, "
         "API Gateway and DynamoDB, with infrastructure defined in AWS CDK. The implementation includes "
@@ -588,16 +574,20 @@ def build() -> Path:
     pdf.t("Declaration", size=12, style="B", h=7)
     pdf.p(
         "I, Akshith Reddy Ponna (Roll No: 2451-23-751-028), submit this project report for the domain "
-        "Cloud Infrastructure and DevOps Engineer. The project title is URL Shortener using Lambda + DynamoDB."
+        "Cloud Infrastructure and DevOps Engineer. The project title is URL Shortener using Lambda + DynamoDB. "
+        "All sections of this report are completed with project details, architecture, implementation, "
+        "test evidence and references. The source code is available at "
+        "https://github.com/Akshith7707/URL-shortner."
     )
-    pdf.ln(8)
-    pdf.p("Student Signature: ____________________")
     pdf.ln(4)
-    pdf.p("Date: 31 / 10 / 2026")
+    pdf.p("Submitted by: Akshith Reddy Ponna")
+    pdf.p("Roll Number: 2451-23-751-028")
+    pdf.p("Domain: Cloud Infrastructure and DevOps Engineer")
+    pdf.p("Project Title: URL Shortener using Lambda + DynamoDB")
 
     # ===== References =====
     pdf.add_page()
-    pdf.h1("21. References")
+    pdf.h1("20. References")
     refs = [
         "1. AWS Documentation - https://docs.aws.amazon.com/",
         "2. AWS Lambda Developer Guide - https://docs.aws.amazon.com/lambda/",
@@ -689,3 +679,4 @@ if __name__ == "__main__":
 
     pages = len(PdfReader(str(path)).pages)
     print(f"Wrote {path} ({pages} pages)")
+
