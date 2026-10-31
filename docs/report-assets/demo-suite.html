@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URL Shortener Local Demo Console</title>
+<style>
+body{margin:0;font-family:'Segoe UI',Tahoma,sans-serif;background:#f4f6f8;color:#1f2937;font-size:14px}
+header{background:#111827;color:#fff;padding:14px 24px;display:flex;justify-content:space-between;align-items:center}
+header h1{margin:0;font-size:18px} .meta{color:#cbd5e1;font-size:12px}
+.pill{display:inline-block;background:#dbeafe;color:#1d4ed8;border-radius:999px;padding:2px 8px;font-size:11px;margin-left:6px}
+.wrap{max-width:1100px;margin:20px auto;padding:0 20px 40px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:16px 18px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.card h2{margin:0 0 10px;font-size:15px}
+.browser{border:1px solid #cbd5e1;border-radius:10px;overflow:hidden;background:#fff}
+.browser-bar{background:#eef2f7;border-bottom:1px solid #e5e7eb;padding:8px 12px;display:flex;gap:8px;align-items:center}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+.r{background:#f87171}.y{background:#fbbf24}.g{background:#34d399}
+.urlbar{flex:1;background:#fff;border:1px solid #d1d5db;border-radius:999px;padding:6px 12px;font-size:12px;color:#334155}
+.viewport{padding:16px;min-height:160px}
+pre{margin:0;background:#0b1220;color:#e2e8f0;border-radius:8px;padding:14px;font-size:12px;white-space:pre-wrap;word-break:break-word}
+.ok{color:#067647;font-weight:600;font-size:12px;margin-top:8px}
+.term{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:14px;font-family:Consolas,monospace;font-size:12px;white-space:pre-wrap;min-height:200px}
+footer{margin-top:16px;color:#6b7280;font-size:12px}
+</style></head><body>
+<header>
+  <div>
+    <h1>URL Shortener Local Demo Console <span class="pill">Zero AWS cost</span></h1>
+    <div class="meta">Akshith Reddy Ponna · 2451-23-751-028 · Lambda + API Gateway + DynamoDB</div>
+  </div>
+  <div class="meta">Base API: http://127.0.0.1:3000</div>
+</header>
+<div class="wrap">
+  <div class="grid">
+    <div class="card">
+      <h2>1) Browser view — Health check</h2>
+      <div class="browser">
+        <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><div class="urlbar">http://127.0.0.1:3000/health</div></div>
+        <div class="viewport"><pre>{"status":"ok"}</pre><div class="ok">HTTP 200 OK</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>2) Create short URL — POST /shorten</h2>
+      <div class="browser">
+        <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><div class="urlbar">http://127.0.0.1:3000/shorten</div></div>
+        <div class="viewport"><pre>{
+  "shortCode": "hcgD8R8",
+  "shortUrl": "http://127.0.0.1:3000/hcgD8R8",
+  "longUrl": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+  "createdAt": "2026-10-31T12:32:58.922Z"
+}</pre><div class="ok">HTTP 201 Created</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:16px">
+    <div class="card">
+      <h2>3) Redirect — GET /hcgD8R8</h2>
+      <div class="browser">
+        <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><div class="urlbar">http://127.0.0.1:3000/hcgD8R8</div></div>
+        <div class="viewport"><pre>HTTP/1.1 301 Moved Permanently
+Location: https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+Cache-Control: no-cache
+Date: Sat, 31 Oct 2026 12:32:59 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 0
+</pre><div class="ok">HTTP 301 Moved Permanently</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>4) Missing code — GET /doesnotexist999</h2>
+      <div class="browser">
+        <div class="browser-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><div class="urlbar">http://127.0.0.1:3000/doesnotexist999</div></div>
+        <div class="viewport"><pre>HTTP/1.1 404 Not Found
+Content-Type: application/json
+Cache-Control: no-store
+Date: Sat, 31 Oct 2026 12:32:59 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 31
+
+{"error":"Short URL not found"}</pre><div class="ok">HTTP 404 Not Found</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h2>5) Terminal evidence</h2>
+    <div class="term">PS C:\Users\nithi\Projects\url-shortener&gt; .\scripts\smoke-test.ps1 -ApiUrl "http://127.0.0.1:3000"
+==&gt; Health check
+OK: {"status":"ok"}
+==&gt; Create short URL
+OK: shortCode=hcgD8R8 shortUrl=http://127.0.0.1:3000/hcgD8R8
+==&gt; Redirect (expect 301)
+OK: 301 -&gt; https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+==&gt; Unknown code (expect 404)
+OK: 404 for unknown short code
+
+All smoke tests passed.</div>
+  </div>
+  <footer>Figure set for project report · Local DynamoDB + local API · Captured 31 Oct 2026</footer>
+</div>
+</body></html>

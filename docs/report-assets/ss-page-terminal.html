@@ -1,0 +1,22 @@
+<!DOCTYPE html><html><head><meta charset=utf-8><title>PowerShell smoke test</title>
+<style>
+html,body{height:100%;margin:0;background:#012456;color:#f3f3f3;font-family:Consolas,'Courier New',monospace}
+.bar{background:#001a33;padding:8px 14px;font:12px Segoe UI;color:#9dc3e6;border-bottom:1px solid #0a3a66}
+.main{padding:18px 20px;font-size:13px;line-height:1.45;white-space:pre-wrap}
+.ok{color:#6adb6a}.cmd{color:#61d6d6}
+</style></head><body>
+<div class="bar">Windows PowerShell · C:\Users\nithi\Projects\url-shortener</div>
+<pre class="main"><span class="cmd">PS C:\Users\nithi\Projects\url-shortener&gt; .\scripts\smoke-test.ps1 -ApiUrl "http://127.0.0.1:3000"</span>
+<span class="ok">==&gt; Health check
+OK: {"status":"ok"}
+==&gt; Create short URL
+OK: {"shortCode":"PHpduk4","shortUrl":"http://127.0.0.1:3000/PHpduk4","longUrl":"https://docs.aws.amazon.com/lambda/latest/dg/welcome.html"}
+==&gt; Redirect (expect 301)
+OK: 301 -&gt; https://docs.aws.amazon.com/lambda/latest/dg/welcome.html
+==&gt; Unknown code (expect 404)
+OK: 404 for unknown short code
+
+All smoke tests passed.</span>
+
+<span class="cmd">PS C:\Users\nithi\Projects\url-shortener&gt;</span></pre>
+</body></html>
